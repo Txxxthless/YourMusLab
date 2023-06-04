@@ -1,6 +1,8 @@
+using API.Helpers;
 using DAL;
 using DAL.Interface;
 using DAL.Repository;
+using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions
@@ -22,6 +24,7 @@ namespace API.Extensions
             });
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IMapper<Track>, TrackMapper>();
 
             return services;
         }

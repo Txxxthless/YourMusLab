@@ -1,3 +1,4 @@
+using API.Helpers;
 using DAL;
 using DAL.Interface;
 using DAL.Specification;
@@ -10,10 +11,12 @@ namespace API.Controllers
     public class MusicController : BaseApiController
     {
         private readonly IGenericRepository<Track> _trackRepository;
+        private readonly IMapper<Track> _mapper;
 
-        public MusicController(IGenericRepository<Track> trackRepository)
+        public MusicController(IGenericRepository<Track> trackRepository, IMapper<Track> mapper)
         {
             _trackRepository = trackRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -21,7 +24,7 @@ namespace API.Controllers
         {
             var specification = new TrackSpecification(trackParams);
             var track = await _trackRepository.GetEntityBySpecification(specification);
-            return Ok(track);
+            return Ok(_mapper.MapOver(track));
         }
 
         [HttpGet]
@@ -29,8 +32,8 @@ namespace API.Controllers
         public async Task<ActionResult> GetTacks([FromQuery] TrackSpecificationParams trackParams)
         {
             var specification = new TrackSpecification(trackParams);
-            var track = await _trackRepository.GetEntitiesBySpecification(specification);
-            return Ok(track);
+            var tracks = await _trackRepository.GetEntitiesBySpecification(specification);
+            return Ok(_mapper.MapOver(tracks));
         }
     }
 }
