@@ -1,4 +1,7 @@
 using DAL;
+using DAL.Interface;
+using DAL.Specification;
+using DAL.Specification.SpecificationParams;
 using Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,17 +9,28 @@ namespace API.Controllers
 {
     public class MusicController : BaseApiController
     {
-        private readonly AppDbContext _context;
+        private readonly IGenericRepository<Track> _trackRepository;
 
-        public MusicController(AppDbContext context)
+        public MusicController(IGenericRepository<Track> trackRepository)
         {
-            _context = context;
+            _trackRepository = trackRepository;
         }
 
         [HttpGet]
-        public IActionResult Do()
+        public async Task<ActionResult> GetTack([FromQuery] TrackSpecificationParams trackParams)
         {
-            return Ok(_context.Tracks.ToList());
+            var specification = new TrackSpecification(trackParams);
+            var track = await _trackRepository.GetEntityBySpecification(specification);
+            return Ok(track);
+        }
+
+        [HttpGet]
+        [Route("tracks")]
+        public async Task<ActionResult> GetTacks([FromQuery] TrackSpecificationParams trackParams)
+        {
+            var specification = new TrackSpecification(trackParams);
+            var track = await _trackRepository.GetEntitiesBySpecification(specification);
+            return Ok(track);
         }
     }
 }
