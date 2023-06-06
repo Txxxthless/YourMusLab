@@ -25,6 +25,7 @@ namespace API.Extensions
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IMapper<Track>, TrackMapper>();
+            services.AddScoped<IMapper<Album>, AlbumMapper>();
 
             return services;
         }

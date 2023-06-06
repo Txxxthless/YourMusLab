@@ -3,26 +3,25 @@ using Domain.ViewModels;
 
 namespace API.Helpers
 {
-    public class TrackMapper : BaseMapper<Track>
+    public class AlbumMapper : BaseMapper<Album>
     {
-        public TrackMapper(IConfiguration configuration)
+        public AlbumMapper(IConfiguration configuration)
             : base(configuration) { }
 
-        public override object MapOver(Track entity)
+        public override object MapOver(Album entity)
         {
-            return new TrackViewModel()
+            return new AlbumViewModel()
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                Genre = entity.Genre.Name,
                 Author = entity.Author.Name,
-                Album = entity.Album.Name,
-                PicturePath = HandleUrl(entity.Album.PictureUrl),
-                FilePath = HandleUrl(entity.FilePath),
+                Genre = entity.Genre.Name,
+                ReleaseYear = entity.ReleaseYear,
+                PictureUrl = HandleUrl(entity.PictureUrl)
             };
         }
 
-        public override IEnumerable<object> MapOver(IEnumerable<Track> entityList)
+        public override IEnumerable<object> MapOver(IEnumerable<Album> entityList)
         {
             var viewModels = new List<object>();
             foreach (var entity in entityList)
