@@ -1,5 +1,6 @@
 using DAL.Interface;
 using Domain.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
@@ -24,6 +25,12 @@ namespace DAL
             {
                 query = query.OrderByDescending(specification.OrderByDescending);
             }
+
+            query = specification.Includes.Aggregate(
+                query,
+                (current, include) => current.Include(include)
+            );
+
             return query;
         }
     }

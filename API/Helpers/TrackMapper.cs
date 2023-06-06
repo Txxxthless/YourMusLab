@@ -3,27 +3,25 @@ using Domain.ViewModels;
 
 namespace API.Helpers
 {
-    public class TrackMapper : IMapper<Track>
+    public class TrackMapper : BaseMapper<Track>
     {
-        private readonly IConfiguration _configuration;
-
         public TrackMapper(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+            : base(configuration) { }
 
-        public object MapOver(Track entity)
+        public override object MapOver(Track entity)
         {
             return new TrackViewModel()
             {
                 Name = entity.Name,
-                Genre = entity.Genre,
-                Author = entity.Author,
-                FilePath = _configuration["ApiUrl"] + entity.FilePath,
+                Genre = entity.Genre.Name,
+                Author = entity.Author.Name,
+                Album = entity.Album.Name,
+                PicturePath = HandleUrl(entity.Album.PictureUrl),
+                FilePath = HandleUrl(entity.FilePath),
             };
         }
 
-        public IEnumerable<object> MapOver(IEnumerable<Track> entityList)
+        public override IEnumerable<object> MapOver(IEnumerable<Track> entityList)
         {
             var viewModels = new List<object>();
             foreach (var entity in entityList)
@@ -32,9 +30,11 @@ namespace API.Helpers
                     new TrackViewModel()
                     {
                         Name = entity.Name,
-                        Genre = entity.Genre,
-                        Author = entity.Author,
-                        FilePath = _configuration["ApiUrl"] + entity.FilePath,
+                        Genre = entity.Genre.Name,
+                        Author = entity.Author.Name,
+                        Album = entity.Album.Name,
+                        PicturePath = HandleUrl(entity.Album.PictureUrl),
+                        FilePath = HandleUrl(entity.FilePath),
                     }
                 );
             }

@@ -13,12 +13,15 @@ namespace DAL.Specification
                         string.IsNullOrEmpty(trackParams.Search)
                         || (
                             track.Name.ToLower().Contains(trackParams.Search.ToLower())
-                            || track.Author.ToLower().Contains(trackParams.Search.ToLower())
+                            || track.Author.Name.ToLower().Contains(trackParams.Search.ToLower())
                         )
                     )
             )
         {
             AddOrderBy(track => track.Name);
+            AddInclude(track => track.Album);
+            AddInclude(track => track.Author);
+            AddInclude(track => track.Genre);
         }
 
         public TrackSpecification(int id)

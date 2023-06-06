@@ -11,6 +11,9 @@ namespace DAL.Specification
 
         public Expression<Func<T, object>>? OrderByDescending { get; private set; }
 
+        public List<Expression<Func<T, object>>> Includes { get; private set; } =
+            new List<Expression<Func<T, object>>>();
+
         public BaseSpecification(Expression<Func<T, bool>> criteria)
         {
             Criteria = criteria;
@@ -26,6 +29,11 @@ namespace DAL.Specification
         protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescending)
         {
             OrderByDescending = orderByDescending;
+        }
+
+        protected void AddInclude(Expression<Func<T, object>> includeExpression)
+        {
+            Includes.Add(includeExpression);
         }
     }
 }
