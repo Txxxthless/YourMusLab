@@ -9,20 +9,17 @@ namespace API.Controllers
 {
     public class MusicController : BaseApiController
     {
-        private readonly IGenericRepository<Track> _trackRepository;
-        private readonly IGenericRepository<Album> _albumRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper<Track> _trackMapper;
         private readonly IMapper<Album> _albumMapper;
 
         public MusicController(
-            IGenericRepository<Track> trackRepository,
+            IUnitOfWork unitOfWork,
             IMapper<Track> mapper,
-            IGenericRepository<Album> albumRespository,
             IMapper<Album> albumMapper
         )
         {
-            _trackRepository = trackRepository;
-            _albumRepository = albumRespository;
+            _unitOfWork = unitOfWork;
             _trackMapper = mapper;
             _albumMapper = albumMapper;
         }
@@ -32,7 +29,9 @@ namespace API.Controllers
         public async Task<ActionResult> GetTack([FromQuery] TrackSpecificationParams trackParams)
         {
             var specification = new TrackSpecification(trackParams);
-            var track = await _trackRepository.GetEntityBySpecification(specification);
+            var track = await _unitOfWork
+                .Repository<Track>()
+                .GetEntityBySpecification(specification);
             return Ok(_trackMapper.MapOver(track));
         }
 
@@ -41,7 +40,9 @@ namespace API.Controllers
         public async Task<ActionResult> GetTacks([FromQuery] TrackSpecificationParams trackParams)
         {
             var specification = new TrackSpecification(trackParams);
-            var tracks = await _trackRepository.GetEntitiesBySpecification(specification);
+            var tracks = await _unitOfWork
+                .Repository<Track>()
+                .GetEntitiesBySpecification(specification);
             return Ok(_trackMapper.MapOver(tracks));
         }
 
@@ -50,7 +51,9 @@ namespace API.Controllers
         public async Task<ActionResult> GetAlbums([FromQuery] AlbumSpecificationParams albumParams)
         {
             var specification = new AlbumSpecification(albumParams);
-            var albums = await _albumRepository.GetEntitiesBySpecification(specification);
+            var albums = await _unitOfWork
+                .Repository<Album>()
+                .GetEntitiesBySpecification(specification);
             return Ok(_albumMapper.MapOver(albums));
         }
     }
