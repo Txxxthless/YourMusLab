@@ -1,4 +1,5 @@
 using API.Extensions;
+using DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,5 +25,17 @@ app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+try
+{
+    await AppDbContextSeed.SeedAsync(appDbContext);
+}
+catch (Exception ex)
+{
+    string message = ex.Message;
+}
 
 app.Run();

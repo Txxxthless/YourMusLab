@@ -1,0 +1,18 @@
+[
+    {
+        "Id" : 1,
+        "Name" : "Bottles for Sale",
+        "AuthorId": 1,
+        "GenreId": 1,
+        "ReleaseYear": 1964,
+        "PictureUrl": "pictures/bottles-for-sale.png"
+    },
+    {
+        "Id" : 2,
+        "Name" : "King II",
+        "AuthorId": 2,
+        "GenreId": 2,
+        "ReleaseYear": 1974,
+        "PictureUrl": "pictures/king-ii.png"
+    }
+]

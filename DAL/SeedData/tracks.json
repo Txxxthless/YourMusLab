@@ -1,0 +1,18 @@
+[
+    {
+        "Id" : 1,
+        "Name" : "Sorrow",
+        "AlbumId" : 1,
+        "AuthorId" : 1,
+        "GenreId" : 1,
+        "FilePath" : "music/sorrow.mp3"
+    },
+    {
+        "Id" : 2,
+        "Name" : "Rock-n-Roll",
+        "AlbumId" : 2,
+        "AuthorId" : 2,
+        "GenreId" : 2,
+        "FilePath" : "music/rock-n-roll.mp3"
+    }
+]
