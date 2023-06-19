@@ -1,0 +1,25 @@
+<div class="container d-flex">
+  <section class="col-3 ">
+    <h5>Search</h5>
+    <input type="text" class="form-control mb-4">
+    <h5>Genres</h5>
+    <select class="form-select mb-4">
+      <option *ngFor="let genre of genres" [value]="genre.name">
+        {{ genre.name }}
+      </option>
+    </select>
+    <h5>Authors</h5>
+    <select class="form-select mb-4">
+      <option *ngFor="let author of authors" [value]="author.name">
+        {{ author.name }}
+      </option>
+    </select>
+  </section>
+  <section class="col-9" style="margin-left: 20px">
+    <h3 style="margin-bottom: 30px">Look at what we've found</h3>
+    <app-track-item
+      *ngFor="let track of tracks"
+      [track]="track"
+    ></app-track-item>
+  </section>
+</div>

@@ -1,0 +1,16 @@
+<div class="row" *ngIf="track" style="margin-top: 10px; cursor: pointer">
+  <div class="col-3">
+    <img
+      src="{{ track.filePath }}"
+      alt="Album picture"
+      class="img-fluid"
+      style="max-height: 100px"
+    />
+  </div>
+  <div class="col-5">
+    <h5>{{ track.name }}</h5>
+  </div>
+  <div class="col-4">
+    <p>{{ track.author }}</p>
+  </div>
+</div>
