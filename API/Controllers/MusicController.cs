@@ -56,5 +56,19 @@ namespace API.Controllers
                 .GetEntitiesBySpecification(specification);
             return Ok(_albumMapper.MapOver(albums));
         }
+
+        [HttpGet]
+        [Route("genres")]
+        public async Task<ActionResult> GetGenres()
+        {
+            return Ok(await _unitOfWork.Repository<Genre>().GetAllAsync());
+        }
+
+        [HttpGet]
+        [Route("authors")]
+        public async Task<ActionResult> GetAuthors()
+        {
+            return Ok(await _unitOfWork.Repository<Author>().GetAllAsync());
+        }
     }
 }

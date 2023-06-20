@@ -28,6 +28,20 @@ namespace API.Extensions
             services.AddScoped<IMapper<Album>, AlbumMapper>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "CorsPolicy",
+                    policy =>
+                    {
+                        policy
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .WithOrigins("http://localhost:4200");
+                    }
+                );
+            });
+
             return services;
         }
     }
