@@ -16,6 +16,14 @@ namespace DAL.Specification
                             || track.Author.Name.ToLower().Contains(trackParams.Search.ToLower())
                         )
                     )
+                    && (
+                        string.IsNullOrEmpty(trackParams.Genre)
+                        || (track.Genre.Name.ToLower().Contains(trackParams.Genre.ToLower()))
+                    )
+                    && (
+                        string.IsNullOrEmpty(trackParams.Author)
+                        || (track.Author.Name.ToLower().Contains(trackParams.Author.ToLower()))
+                    )
             )
         {
             AddOrderBy(track => track.Name);

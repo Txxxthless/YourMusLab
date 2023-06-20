@@ -5,4 +5,5 @@ export interface Track {
     album: string;
     genre: string;
     filePath: string;
+    picturePath: string;
 }

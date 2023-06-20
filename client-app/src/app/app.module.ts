@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
 import { CoreModule } from './core/core.module';
 import { MusicBrowserModule } from './music-browser/music-browser.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +16,7 @@ import { MusicBrowserModule } from './music-browser/music-browser.module';
     HomeModule,
     CoreModule,
     MusicBrowserModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

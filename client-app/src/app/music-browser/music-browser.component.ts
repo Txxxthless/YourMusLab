@@ -1,40 +1,64 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Genre } from '../shared/models/Genre';
 import { Author } from '../shared/models/Author';
 import { Track } from '../shared/models/Track';
+import { MusicService } from '../shared/service/music.service';
+import { TrackParams } from '../shared/models/TrackParams';
 
 @Component({
   selector: 'app-music-browser',
   templateUrl: './music-browser.component.html',
   styleUrls: ['./music-browser.component.css'],
 })
-export class MusicBrowserComponent {
-  genres: Genre[] = [
-    { id: 1, name: 'Progressive Rock' },
-    { id: 2, name: 'Rock-n-Roll' },
-  ];
-  authors: Author[] = [
-    { id: 1, name: 'King' },
-    { id: 2, name: 'The Bottles' },
-  ];
-  tracks: Track[] = [
-    {
-      id: 1,
-      name: 'Rock-n-Roll',
-      genre: 'Progressive Rock',
-      author: 'King',
-      album: 'King II',
-      filePath:
-        'https://i.pinimg.com/564x/60/52/9f/60529fffa71e790ded04b0bd92c9ac8a.jpg',
-    },
-    {
-      id: 2,
-      name: 'Sorrow',
-      genre: 'Rock-n-Roll',
-      author: 'The Bottles',
-      album: 'Bottles for Sale',
-      filePath:
-        'https://i.pinimg.com/564x/60/52/9f/60529fffa71e790ded04b0bd92c9ac8a.jpg',
-    },
-  ];
+export class MusicBrowserComponent implements OnInit {
+  authors?: Author[];
+  genres?: Genre[];
+  tracks?: Track[];
+
+  searchParams: TrackParams = new TrackParams();
+
+  @ViewChild('search') search?: ElementRef;
+
+  constructor(private musicService: MusicService) {}
+
+  ngOnInit(): void {
+    this.getAuthors();
+    this.getGenres();
+    this.getTracks();
+  }
+
+  onSearch() {
+    this.searchParams.search = this.search?.nativeElement.value;
+  }
+
+  onGenreSelected(event: any) {
+    this.searchParams.genre = event.target?.value;
+    console.log(this.searchParams);
+  }
+
+  onAuthorSelected(event: any) {
+    this.searchParams.author = event.target?.value;
+    console.log(this.searchParams);
+  }
+
+  getTracks() {
+    if (this.searchParams) {
+      this.musicService
+        .getMusic(this.searchParams)
+        .subscribe({ next: (tracks) => (this.tracks = tracks) });
+    }
+    this.searchParams = new TrackParams();
+  }
+
+  getAuthors() {
+    this.musicService
+      .getAuthors()
+      .subscribe({ next: (authors) => (this.authors = authors) });
+  }
+
+  getGenres() {
+    this.musicService
+      .getGenres()
+      .subscribe({ next: (genres) => (this.genres = genres) });
+  }
 }
