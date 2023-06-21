@@ -64,4 +64,9 @@ export class MusicBrowserComponent implements OnInit {
       .getGenres()
       .subscribe({ next: (genres) => (this.genres = genres) });
   }
+
+  onTrackSelected(track: Track) {
+    localStorage.setItem('current_track', JSON.stringify(track));
+    this.musicService.currentTrack.next(track);
+  }
 }

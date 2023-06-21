@@ -4,12 +4,15 @@ import { Track } from '../models/Track';
 import { Author } from '../models/Author';
 import { Genre } from '../models/Genre';
 import { TrackParams } from '../models/TrackParams';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MusicService {
   baseUrl = 'https://localhost:5002/api/';
+
+  currentTrack = new BehaviorSubject<Track | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +30,7 @@ export class MusicService {
     if (trackParams.genre) {
       params = params.append('genre', trackParams.genre);
     }
-    
+
     return this.http.get<Track[]>(this.baseUrl + 'music/tracks', {
       params: params,
     });
@@ -39,5 +42,12 @@ export class MusicService {
 
   getGenres() {
     return this.http.get<Genre[]>(this.baseUrl + 'music/genres');
+  }
+
+  getCurrentTrack(): Track | undefined {
+    const currentTrack = localStorage.getItem('current_track');
+    if (currentTrack) {
+      return JSON.parse(currentTrack) as Track;
+    } else return undefined;
   }
 }

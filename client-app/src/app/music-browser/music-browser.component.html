@@ -28,6 +28,7 @@
     <app-track-item
       *ngFor="let track of tracks"
       [track]="track"
+      (click)="onTrackSelected(track)"
     ></app-track-item>
   </section>
 </div>
