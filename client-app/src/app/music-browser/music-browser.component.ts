@@ -46,8 +46,11 @@ export class MusicBrowserComponent implements OnInit {
       this.musicService
         .getMusic(this.searchParams)
         .subscribe({ next: (tracks) => (this.tracks = tracks) });
+      if (this.search) {
+        this.search.nativeElement.value = '';
+        this.searchParams.search = '';
+      }
     }
-    this.searchParams = new TrackParams();
   }
 
   getAuthors() {

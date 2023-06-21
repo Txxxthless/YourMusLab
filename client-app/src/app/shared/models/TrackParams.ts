@@ -3,4 +3,6 @@ export class TrackParams {
   search: string = '';
   author: string = '';
   genre: string = '';
+
+  constructor() {}
 }
