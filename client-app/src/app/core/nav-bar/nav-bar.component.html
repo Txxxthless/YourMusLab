@@ -3,8 +3,13 @@
 >
   <nav class="my-2 text-uppercase fs-4">
     <a routerLink="/" class="p-2">Home</a>
-    <a routerLink="/account/login" class="p-2">Login</a>
-    <a routerLink="/account/register" class="p-2">Sing up</a>    
+    <ng-container *ngIf="!accountService.currentUser.value">
+      <a routerLink="/account/login" class="p-2">Login</a>
+      <a routerLink="/account/register" class="p-2">Sing up</a>
+    </ng-container>
+    <ng-container *ngIf="accountService.currentUser.value">
+      <a routerLink="/account" class="p-2">Account</a>
+    </ng-container>
     <a routerLink="/browse" class="p-2">Browse</a>
   </nav>
 </header>

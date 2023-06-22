@@ -37,7 +37,7 @@ namespace API.Extensions
                         policy
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .WithOrigins("http://localhost:4200");
+                            .WithOrigins("https://localhost:4300");
                     }
                 );
             });

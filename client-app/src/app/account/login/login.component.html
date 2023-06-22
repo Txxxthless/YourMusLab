@@ -1,15 +1,24 @@
 <div class="d-flex justify-content-center mt-5">
   <div class="col-3">
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="text-center mb-4">
         <h1 class="mb-3">Login</h1>
-        <input type="email" autocomplete="off" class="form-control" placeholder="Enter email" />
-        <input type="password" class="form-control mt-4" placeholder="Enter password"/>
+        <input
+          type="email"
+          autocomplete="off"
+          class="form-control"
+          placeholder="Enter email"
+          [formControl]="loginForm.controls['email']"
+        />
+        <input
+          type="password"
+          class="form-control mt-4"
+          placeholder="Enter password"
+          [formControl]="loginForm.controls['password']"
+        />
       </div>
       <div class="d-grid">
-        <button type="sumbit" class="btn btn-primary mt-3">
-          Sign in
-        </button>
+        <button type="sumbit" class="btn btn-primary mt-3">Sign in</button>
       </div>
     </form>
   </div>
