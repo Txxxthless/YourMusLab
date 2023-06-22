@@ -11,6 +11,11 @@ const routes: Routes = [
         (m) => m.MusicBrowserModule
       ),
   },
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('./account/account.module').then((m) => m.AccountModule),
+  },
 ];
 
 @NgModule({

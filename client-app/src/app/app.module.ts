@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
 import { CoreModule } from './core/core.module';
-import { MusicBrowserModule } from './music-browser/music-browser.module';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -15,7 +14,6 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     HomeModule,
     CoreModule,
-    MusicBrowserModule,
     HttpClientModule,
   ],
   providers: [],
