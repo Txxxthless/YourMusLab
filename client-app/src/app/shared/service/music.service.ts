@@ -4,7 +4,7 @@ import { Track } from '../models/Track';
 import { Author } from '../models/Author';
 import { Genre } from '../models/Genre';
 import { TrackParams } from '../models/TrackParams';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { LoadingService } from './loading.service';
 
 @Injectable({
@@ -37,33 +37,36 @@ export class MusicService {
       params = params.append('genre', trackParams.genre);
     }
 
-    const observableToReturn = this.http.get<Track[]>(
-      this.baseUrl + 'music/tracks',
-      {
+    return this.http
+      .get<Track[]>(this.baseUrl + 'music/tracks', {
         params: params,
-      }
-    );
-    
-    this.loadingService.endLoading();
-    return observableToReturn;
+      })
+      .pipe(
+        map((track) => {
+          this.loadingService.endLoading();
+          return track;
+        })
+      );
   }
 
   getAuthors() {
     this.loadingService.beginLoading();
-    const observableToReturn = this.http.get<Author[]>(
-      this.baseUrl + 'music/authors'
+    return this.http.get<Author[]>(this.baseUrl + 'music/authors').pipe(
+      map((author) => {
+        this.loadingService.endLoading();
+        return author;
+      })
     );
-    this.loadingService.endLoading();
-    return observableToReturn;
   }
 
   getGenres() {
     this.loadingService.beginLoading();
-    const observableToReturn = this.http.get<Genre[]>(
-      this.baseUrl + 'music/genres'
+    return this.http.get<Genre[]>(this.baseUrl + 'music/genres').pipe(
+      map((genre) => {
+        this.loadingService.endLoading();
+        return genre;
+      })
     );
-    this.loadingService.endLoading();
-    return observableToReturn;
   }
 
   getCurrentTrack(): Track | undefined {
