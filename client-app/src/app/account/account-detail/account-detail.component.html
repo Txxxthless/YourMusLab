@@ -1,1 +1,28 @@
-<p>account-detail works!</p>
+<div class="container">
+  <div class="row d-flex justify-content center">
+    <div class="col-5">
+      <h1>Account details</h1>
+      <div class="row mt-4 mb-4">
+        <div class="col-12 mb-4">
+            <img src="/assets/user-photo.png" alt="User photo" class="img-fluid" style="max-height: 350px">
+        </div>
+        <div class="col-6">Name:</div>
+        <div class="col-6">
+          <h5>{{ currentUser?.username }}</h5>
+        </div>
+        <div class="col-6">Email:</div>
+        <div class="col-6">
+          <h5>{{ currentUser?.email }}</h5>
+        </div>
+      </div>
+      <a
+        style="text-decoration: underline; cursor: pointer; font-size: 1.5em"
+        (click)="logout()"
+        >Logout</a
+      >
+    </div>
+    <div class="col-7">
+      <h1>Liked music</h1>
+    </div>
+  </div>
+</div>
