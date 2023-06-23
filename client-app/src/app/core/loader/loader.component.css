@@ -1,0 +1,13 @@
+.loader-div {
+    height: 100%;
+    width: 100%;
+    opacity: 0.3;
+    top: 0;
+    position: absolute;
+    background-color: grey;
+}
+
+.height100 {
+    height: 2400px;
+    background-color: red;
+}

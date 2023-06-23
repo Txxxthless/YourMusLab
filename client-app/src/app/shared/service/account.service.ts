@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../models/user';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +13,14 @@ export class AccountService {
 
   currentUser = new BehaviorSubject<User | null>(null);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private loadingSerivce: LoadingService
+  ) {}
 
   login(email: string, password: string) {
+    this.loadingSerivce.beginLoading();
     return this.http
       .post<User>(this.baseUrl + 'account/login', {
         email,
@@ -24,11 +30,13 @@ export class AccountService {
         map((user) => {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUser.next(user);
+          this.loadingSerivce.endLoading();
         })
       );
   }
 
   register(email: string, password: string, username: string) {
+    this.loadingSerivce.beginLoading();
     return this.http
       .post<User>(this.baseUrl + 'account/register', {
         email,
@@ -39,6 +47,7 @@ export class AccountService {
         map((user) => {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUser.next(user);
+          this.loadingSerivce.endLoading();
         })
       );
   }

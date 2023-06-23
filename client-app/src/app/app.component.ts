@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from './shared/service/account.service';
 import { User } from './shared/models/user';
+import { LoadingService } from './shared/service/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,12 @@ import { User } from './shared/models/user';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  constructor(private accountService: AccountService) {}
+  isLoading = false;
+
+  constructor(
+    private accountService: AccountService,
+    private loadingService: LoadingService
+  ) {}
 
   ngOnInit(): void {
     const userFromLocalStorage = localStorage.getItem('user');
@@ -16,5 +22,12 @@ export class AppComponent implements OnInit {
       const user = JSON.parse(userFromLocalStorage) as User;
       this.accountService.currentUser.next(user);
     }
+
+    this.loadingService.isLoading.subscribe({
+      next: (isLoading) => {
+        this.isLoading = isLoading;
+        console.log(this.isLoading);
+      },
+    });
   }
 }

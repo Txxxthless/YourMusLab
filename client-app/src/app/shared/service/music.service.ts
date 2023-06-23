@@ -5,6 +5,7 @@ import { Author } from '../models/Author';
 import { Genre } from '../models/Genre';
 import { TrackParams } from '../models/TrackParams';
 import { BehaviorSubject } from 'rxjs';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +15,14 @@ export class MusicService {
 
   currentTrack = new BehaviorSubject<Track | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private loadingService: LoadingService
+  ) {}
 
   getMusic(trackParams: TrackParams) {
+    this.loadingService.beginLoading();
+
     let params = new HttpParams();
     if (trackParams.id) {
       params = params.append('id', trackParams.id);
@@ -31,17 +37,33 @@ export class MusicService {
       params = params.append('genre', trackParams.genre);
     }
 
-    return this.http.get<Track[]>(this.baseUrl + 'music/tracks', {
-      params: params,
-    });
+    const observableToReturn = this.http.get<Track[]>(
+      this.baseUrl + 'music/tracks',
+      {
+        params: params,
+      }
+    );
+    
+    this.loadingService.endLoading();
+    return observableToReturn;
   }
 
   getAuthors() {
-    return this.http.get<Author[]>(this.baseUrl + 'music/authors');
+    this.loadingService.beginLoading();
+    const observableToReturn = this.http.get<Author[]>(
+      this.baseUrl + 'music/authors'
+    );
+    this.loadingService.endLoading();
+    return observableToReturn;
   }
 
   getGenres() {
-    return this.http.get<Genre[]>(this.baseUrl + 'music/genres');
+    this.loadingService.beginLoading();
+    const observableToReturn = this.http.get<Genre[]>(
+      this.baseUrl + 'music/genres'
+    );
+    this.loadingService.endLoading();
+    return observableToReturn;
   }
 
   getCurrentTrack(): Track | undefined {
