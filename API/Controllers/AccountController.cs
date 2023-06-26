@@ -79,12 +79,5 @@ namespace API.Controllers
                 }
             );
         }
-
-        [HttpGet]
-        [Authorize]
-        public ActionResult SecretInfo()
-        {
-            return Ok("Paul is the best beatle");
-        }
     }
 }

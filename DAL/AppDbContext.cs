@@ -10,6 +10,7 @@ namespace DAL
         public DbSet<Author>? Authors { get; set; }
         public DbSet<Genre>? Genres { get; set; }
         public DbSet<Album>? Albums { get; set; }
+        public DbSet<LikedTrack>? LikedTracks { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

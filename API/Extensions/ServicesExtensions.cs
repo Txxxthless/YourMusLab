@@ -2,6 +2,7 @@ using API.Helpers;
 using DAL;
 using DAL.Interface;
 using DAL.Repository;
+using DAL.Service;
 using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,7 @@ namespace API.Extensions
             services.AddScoped<IMapper<Track>, TrackMapper>();
             services.AddScoped<IMapper<Album>, AlbumMapper>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddCors(options =>
             {

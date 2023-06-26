@@ -45,5 +45,17 @@ namespace DAL.Repository
                 specification
             );
         }
+
+        public T Add(T entity)
+        {
+            _context.Add(entity);
+            return entity;
+        }
+
+        public T Delete(T entity)
+        {
+            _context.Remove(entity);
+            return entity;
+        }
     }
 }
