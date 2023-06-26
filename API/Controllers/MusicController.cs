@@ -4,6 +4,7 @@ using DAL.Interface;
 using DAL.Specification;
 using DAL.Specification.SpecificationParams;
 using Domain.Entity;
+using Domain.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -79,20 +80,20 @@ namespace API.Controllers
         [HttpPost]
         [Route("liketrack")]
         [Authorize]
-        public async Task<ActionResult> LikeTrack([FromQuery] int trackId)
+        public async Task<ActionResult> LikeTrack(LikedTrackViewModel likedTrackViewModel)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            await _identityService.LikeTrackAsync(trackId, email);
+            await _identityService.LikeTrackAsync(likedTrackViewModel.TrackId, email);
             return Ok();
         }
 
         [HttpPost]
         [Route("unliketrack")]
         [Authorize]
-        public async Task<ActionResult> UnlikeTrack([FromQuery] int trackId)
+        public async Task<ActionResult> UnlikeTrack(LikedTrackViewModel likedTrackViewModel)
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            await _identityService.UnlikeTrackAsync(trackId, email);
+            await _identityService.UnlikeTrackAsync(likedTrackViewModel.TrackId, email);
             return Ok();
         }
 
@@ -101,6 +102,15 @@ namespace API.Controllers
         public async Task<ActionResult> Get()
         {
             return Ok(await _unitOfWork.Repository<LikedTrack>().GetAllAsync());
+        }
+
+        [HttpGet]
+        [Route("isliked")]
+        [Authorize]
+        public async Task<ActionResult> IsLiked(int trackId)
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            return Ok(await _identityService.IsTrackLiked(trackId, email));
         }
     }
 }

@@ -16,6 +16,21 @@ namespace DAL.Service
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<bool> IsTrackLiked(int trackId, string userEmail)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            
+            if (user == null)
+            {
+                return false;
+            }
+
+            var specification = new LikedTrackSpecification(trackId, userEmail);
+            var likedTrack = await _unitOfWork.Repository<LikedTrack>().GetEntityBySpecification(specification);
+
+            return likedTrack != null;
+        }
+
         public async Task LikeTrackAsync(int trackId, string userEmail)
         {
             var track = await _unitOfWork.Repository<Track>().GetByIdAsync(trackId);
@@ -26,7 +41,15 @@ namespace DAL.Service
                 return;
             }
 
-            var likedTrack = new LikedTrack() { UserEmail = user.Email, TrackId = track.Id };
+            var specification = new LikedTrackSpecification(trackId, userEmail);
+            var likedTrack = await _unitOfWork.Repository<LikedTrack>().GetEntityBySpecification(specification);
+
+            if (likedTrack != null)
+            {
+                return;
+            }
+
+            likedTrack = new LikedTrack() { UserEmail = user.Email, TrackId = track.Id };
 
             _unitOfWork.Repository<LikedTrack>().Add(likedTrack);
             await _unitOfWork.CommitAsync();

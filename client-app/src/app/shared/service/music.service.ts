@@ -1,11 +1,12 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Track } from '../models/Track';
 import { Author } from '../models/Author';
 import { Genre } from '../models/Genre';
 import { TrackParams } from '../models/TrackParams';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { LoadingService } from './loading.service';
+import { AccountService } from './account.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,12 @@ export class MusicService {
   baseUrl = 'https://localhost:5002/api/';
 
   currentTrack = new BehaviorSubject<Track | null>(null);
+  isCurrentTrackLiked = new BehaviorSubject<boolean>(false);
 
   constructor(
     private http: HttpClient,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private accountService: AccountService
   ) {}
 
   getMusic(trackParams: TrackParams) {
@@ -74,5 +77,33 @@ export class MusicService {
     if (currentTrack) {
       return JSON.parse(currentTrack) as Track;
     } else return undefined;
+  }
+
+  likeTrack() {
+    if (this.currentTrack.value && this.accountService.currentUser.value) {
+      const trackId = this.currentTrack.value.id;
+
+      return this.http.post(this.baseUrl + 'music/liketrack', {
+        trackId,
+      });
+    }
+    return new Observable();
+  }
+
+  unlikeTrack() {
+    if (this.currentTrack.value && this.accountService.currentUser.value) {
+      const trackId = this.currentTrack.value.id;
+
+      return this.http.post(this.baseUrl + 'music/unliketrack', {
+        trackId,
+      });
+    }
+    return new Observable();
+  }
+
+  isTrackLiked(trackId: number) {
+    return this.http.get<boolean>(
+      this.baseUrl + `music/isliked?trackId=${trackId}`
+    );
   }
 }
