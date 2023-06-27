@@ -24,8 +24,6 @@ export class MusicService {
   ) {}
 
   getMusic(trackParams: TrackParams) {
-    this.loadingService.beginLoading();
-
     let params = new HttpParams();
     if (trackParams.id) {
       params = params.append('id', trackParams.id);
@@ -40,36 +38,17 @@ export class MusicService {
       params = params.append('genre', trackParams.genre);
     }
 
-    return this.http
-      .get<Track[]>(this.baseUrl + 'music/tracks', {
-        params: params,
-      })
-      .pipe(
-        map((track) => {
-          this.loadingService.endLoading();
-          return track;
-        })
-      );
+    return this.http.get<Track[]>(this.baseUrl + 'music/tracks', {
+      params: params,
+    });
   }
 
   getAuthors() {
-    this.loadingService.beginLoading();
-    return this.http.get<Author[]>(this.baseUrl + 'music/authors').pipe(
-      map((author) => {
-        this.loadingService.endLoading();
-        return author;
-      })
-    );
+    return this.http.get<Author[]>(this.baseUrl + 'music/authors');
   }
 
   getGenres() {
-    this.loadingService.beginLoading();
-    return this.http.get<Genre[]>(this.baseUrl + 'music/genres').pipe(
-      map((genre) => {
-        this.loadingService.endLoading();
-        return genre;
-      })
-    );
+    return this.http.get<Genre[]>(this.baseUrl + 'music/genres');
   }
 
   getCurrentTrack(): Track | undefined {

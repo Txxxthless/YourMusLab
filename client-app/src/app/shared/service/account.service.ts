@@ -16,11 +16,9 @@ export class AccountService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private loadingSerivce: LoadingService
   ) {}
 
   login(email: string, password: string) {
-    this.loadingSerivce.beginLoading();
     return this.http
       .post<User>(this.baseUrl + 'account/login', {
         email,
@@ -30,13 +28,11 @@ export class AccountService {
         map((user) => {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUser.next(user);
-          this.loadingSerivce.endLoading();
         })
       );
   }
 
   register(email: string, password: string, username: string) {
-    this.loadingSerivce.beginLoading();
     return this.http
       .post<User>(this.baseUrl + 'account/register', {
         email,
@@ -47,7 +43,6 @@ export class AccountService {
         map((user) => {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUser.next(user);
-          this.loadingSerivce.endLoading();
         })
       );
   }
