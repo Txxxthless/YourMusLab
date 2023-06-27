@@ -4,7 +4,12 @@
       <h1>Account details</h1>
       <div class="row mt-4 mb-4">
         <div class="col-12 mb-4">
-            <img src="/assets/user-photo.png" alt="User photo" class="img-fluid" style="max-height: 350px">
+          <img
+            src="/assets/user-photo.png"
+            alt="User photo"
+            class="img-fluid"
+            style="max-height: 350px"
+          />
         </div>
         <div class="col-6">Name:</div>
         <div class="col-6">
@@ -23,6 +28,12 @@
     </div>
     <div class="col-7">
       <h1>Liked music</h1>
+      <div class="row" *ngIf="userLikedTracks">
+        <app-track-item
+          *ngFor="let track of userLikedTracks"
+          [track]="track"
+        ></app-track-item>
+      </div>
     </div>
   </div>
 </div>

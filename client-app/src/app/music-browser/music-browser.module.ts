@@ -8,5 +8,6 @@ import { CoreModule } from '../core/core.module';
 @NgModule({
   declarations: [MusicBrowserComponent, TrackItemComponent],
   imports: [CommonModule, MusicBrowserRoutingModule, CoreModule],
+  exports: [TrackItemComponent],
 })
 export class MusicBrowserModule {}

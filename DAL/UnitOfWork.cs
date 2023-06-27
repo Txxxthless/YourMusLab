@@ -20,9 +20,9 @@ namespace DAL
             await _context.SaveChangesAsync();
         }
 
-        public void Dispose()
+        public async void Dispose()
         {
-            _context.Dispose();
+            await _context.DisposeAsync();
         }
 
         public IGenericRepository<T> Repository<T>()

@@ -1,5 +1,6 @@
 using DAL.Interface;
 using DAL.Specification;
+using DAL.Specification.SpecificationParams;
 using Domain.Entity;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,17 +17,47 @@ namespace DAL.Service
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<IReadOnlyList<Track>> GetLikedTracksAsync(string userEmail)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var specification = new LikedTrackSpecification(userEmail);
+            var likedTracks = await _unitOfWork
+                .Repository<LikedTrack>()
+                .GetEntitiesBySpecification(specification);
+
+            var tracks = new List<Track>();
+
+            foreach (var likedTrack in likedTracks)
+            {
+                var trackSpecification = new TrackSpecification(new TrackSpecificationParams()
+                {
+                    Id = likedTrack.TrackId
+                });
+                tracks.Add(
+                    await _unitOfWork.Repository<Track>().GetEntityBySpecification(trackSpecification));
+            }
+
+            return tracks;
+        }
+
         public async Task<bool> IsTrackLiked(int trackId, string userEmail)
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
-            
+
             if (user == null)
             {
                 return false;
             }
 
             var specification = new LikedTrackSpecification(trackId, userEmail);
-            var likedTrack = await _unitOfWork.Repository<LikedTrack>().GetEntityBySpecification(specification);
+            var likedTrack = await _unitOfWork
+                .Repository<LikedTrack>()
+                .GetEntityBySpecification(specification);
 
             return likedTrack != null;
         }
@@ -42,7 +73,9 @@ namespace DAL.Service
             }
 
             var specification = new LikedTrackSpecification(trackId, userEmail);
-            var likedTrack = await _unitOfWork.Repository<LikedTrack>().GetEntityBySpecification(specification);
+            var likedTrack = await _unitOfWork
+                .Repository<LikedTrack>()
+                .GetEntityBySpecification(specification);
 
             if (likedTrack != null)
             {

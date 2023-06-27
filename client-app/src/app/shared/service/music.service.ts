@@ -85,4 +85,11 @@ export class MusicService {
       this.baseUrl + `music/isliked?trackId=${trackId}`
     );
   }
+
+  getLikedTracksForUser() {
+    if (this.accountService.currentUser.value) {
+      return this.http.get<Track[]>(this.baseUrl + 'music/likedtracks');
+    }
+    return new Observable<Track[]>();
+  }
 }

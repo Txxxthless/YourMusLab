@@ -82,7 +82,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult> LikeTrack(LikedTrackViewModel likedTrackViewModel)
         {
-            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var email = GetCurrentUserEmail();
             await _identityService.LikeTrackAsync(likedTrackViewModel.TrackId, email);
             return Ok();
         }
@@ -92,7 +92,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult> UnlikeTrack(LikedTrackViewModel likedTrackViewModel)
         {
-            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var email = GetCurrentUserEmail();
             await _identityService.UnlikeTrackAsync(likedTrackViewModel.TrackId, email);
             return Ok();
         }
@@ -105,12 +105,27 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [Route("likedtracks")]
+        public async Task<ActionResult> GetLikedTracks()
+        {
+            var email = GetCurrentUserEmail();
+            var likedTracks = await _identityService.GetLikedTracksAsync(email);
+            return Ok(_trackMapper.MapOver(likedTracks));
+        }
+
+        [HttpGet]
         [Route("isliked")]
         [Authorize]
         public async Task<ActionResult> IsLiked(int trackId)
         {
-            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var email = GetCurrentUserEmail();
             return Ok(await _identityService.IsTrackLiked(trackId, email));
+        }
+
+        private string GetCurrentUserEmail()
+        {
+            return User.FindFirst(ClaimTypes.Email)?.Value;
         }
     }
 }
