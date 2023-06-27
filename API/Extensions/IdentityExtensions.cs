@@ -19,7 +19,7 @@ namespace API.Extensions
                 options.UseSqlite(configuration.GetConnectionString("IdentityConnection"));
             });
 
-            services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<IdentityContext>();
+            services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

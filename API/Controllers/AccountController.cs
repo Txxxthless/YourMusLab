@@ -1,6 +1,6 @@
 using API.Helpers;
+using DAL.Interface;
 using Domain.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +10,17 @@ namespace API.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IEmailService emailService
         )
         {
             _userManager = userManager;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -78,6 +81,73 @@ namespace API.Controllers
                     Token = TokenHelper.CreateToken(user, _configuration)
                 }
             );
+        }
+
+        [HttpPost("forgotpassword")]
+        public async Task<ActionResult> ForgotPassword(
+            ForgotPasswordViewModel forgotPasswordViewModel
+        )
+        {
+            var user = await _userManager.FindByEmailAsync(forgotPasswordViewModel.Email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var validator = new PasswordValidator<IdentityUser>();
+            var validation = await validator.ValidateAsync(
+                _userManager,
+                null,
+                forgotPasswordViewModel.Password
+            );
+
+            if (validation.Succeeded)
+            {
+                var callbackUrl = Url.Action(
+                    "ResetPassword",
+                    "Account",
+                    new
+                    {
+                        password = forgotPasswordViewModel.Password,
+                        email = forgotPasswordViewModel.Email,
+                        token = token
+                    },
+                    protocol: HttpContext.Request.Scheme
+                );
+
+                _emailService.SendEmail(
+                    forgotPasswordViewModel.Email,
+                    "Password reset",
+                    $"Ignore this message if you don't want to reset the password! Otherwise click this link: {callbackUrl}"
+                );
+
+                return Ok();
+            }
+
+            return BadRequest("The password is too weak");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ResetPassword(string password, string email, string token = null)
+        {
+            if (token == null)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.ResetPasswordAsync(user, token, password);
+
+            return Redirect("https://google.com");
         }
     }
 }

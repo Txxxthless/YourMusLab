@@ -29,6 +29,7 @@ namespace API.Extensions
             services.AddScoped<IMapper<Album>, AlbumMapper>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddCors(options =>
             {
