@@ -10,10 +10,14 @@ export class LoadingService {
   constructor() {}
 
   beginLoading() {
-    this.isLoading.next(true);
+    if (!this.isLoading.value) {
+      this.isLoading.next(true);
+    }
   }
 
   endLoading() {
-    this.isLoading.next(false);
+    if (this.isLoading.value) {
+      this.isLoading.next(false);
+    }
   }
 }

@@ -9,11 +9,9 @@ import { LoadingService } from './shared/service/loading.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  isLoading = false;
-
   constructor(
     private accountService: AccountService,
-    private loadingService: LoadingService
+    public loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -22,11 +20,5 @@ export class AppComponent implements OnInit {
       const user = JSON.parse(userFromLocalStorage) as User;
       this.accountService.currentUser.next(user);
     }
-
-    this.loadingService.isLoading.subscribe({
-      next: (isLoading) => {
-        this.isLoading = isLoading;
-      },
-    });
   }
 }
