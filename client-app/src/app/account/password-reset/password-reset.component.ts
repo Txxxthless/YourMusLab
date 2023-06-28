@@ -9,9 +9,15 @@ import { AccountService } from 'src/app/shared/service/account.service';
   styleUrls: ['./password-reset.component.css'],
 })
 export class PasswordResetComponent {
+  passwordExp =
+    "(?=^.{6,10}$)(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*s).*$";
+
   passwordResetForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    newPassword: new FormControl('', [Validators.required]),
+    newPassword: new FormControl('', [
+      Validators.required,
+      Validators.pattern(this.passwordExp),
+    ]),
   });
 
   constructor(private accountService: AccountService, private router: Router) {}
@@ -31,5 +37,13 @@ export class PasswordResetComponent {
             this.router.navigateByUrl('/account/forgot-password-success'),
         });
     }
+  }
+
+  get email() {
+    return this.passwordResetForm.get('email');
+  }
+
+  get newPassword() {
+    return this.passwordResetForm.get('newPassword');
   }
 }

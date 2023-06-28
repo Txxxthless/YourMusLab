@@ -9,19 +9,32 @@
           class="form-control"
           placeholder="Enter email"
           [formControl]="loginForm.controls['email']"
+          [class.text-danger]="email && email.invalid"
         />
         <input
           type="password"
           class="form-control mt-4"
           placeholder="Enter password"
           [formControl]="loginForm.controls['password']"
+          [class.text-danger]="password && password.invalid"
         />
       </div>
-      <a routerLink="/account/forgot-password" class="mt-4" style="text-decoration: underline; cursor: pointer"
+      <a
+        routerLink="/account/forgot-password"
+        class="mt-4"
+        style="text-decoration: underline; cursor: pointer"
         >Forgot password?</a
       >
       <div class="d-grid">
-        <button type="sumbit" class="btn btn-primary mt-3">Sign in</button>
+        <button
+          type="sumbit"
+          class="btn btn-primary mt-3"
+          [disabled]="
+            (email && email.invalid) || (password && password.invalid)
+          "
+        >
+          Sign in
+        </button>
       </div>
     </form>
   </div>

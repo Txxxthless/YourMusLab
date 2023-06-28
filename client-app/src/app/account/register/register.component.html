@@ -1,18 +1,45 @@
 <div class="d-flex justify-content-center mt-5">
-    <div class="col-3">
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <div class="text-center mb-4">
-          <h1 class="mb-3">Sign up</h1>
-          <input type="text" autocomplete="off" class="form-control mt-4" placeholder="Enter your name" [formControl]="registerForm.controls['username']"/>
-          <input type="email" autocomplete="off" class="form-control mt-4" placeholder="Enter email" [formControl]="registerForm.controls['email']" />
-          <input type="password" class="form-control mt-4" placeholder="Enter password" [formControl]="registerForm.controls['password']"/>
-        </div>
-        <div class="d-grid">
-          <button type="sumbit" class="btn btn-primary mt-3">
-            Sign up
-          </button>
-        </div>
-      </form>
-    </div>
+  <div class="col-3">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="text-center mb-4">
+        <h1 class="mb-3">Sign up</h1>
+        <input
+          type="text"
+          autocomplete="off"
+          class="form-control mt-4"
+          placeholder="Enter your name"
+          [formControl]="registerForm.controls['username']"
+          [class.text-danger]="username && username.invalid"
+        />
+        <input
+          type="email"
+          autocomplete="off"
+          class="form-control mt-4"
+          placeholder="Enter email"
+          [formControl]="registerForm.controls['email']"
+          [class.text-danger]="email && email.invalid"
+        />
+        <input
+          type="password"
+          class="form-control mt-4"
+          placeholder="Enter password"
+          [formControl]="registerForm.controls['password']"
+          [class.text-danger]="password && password.invalid"
+        />
+      </div>
+      <div class="d-grid">
+        <button
+          type="sumbit"
+          class="btn btn-primary mt-3"
+          [disabled]="
+            (username && username.invalid) ||
+            (email && email.invalid) ||
+            (password && password.invalid)
+          "
+        >
+          Sign up
+        </button>
+      </div>
+    </form>
   </div>
-
+</div>
