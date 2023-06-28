@@ -121,7 +121,7 @@ namespace API.Controllers
                 _emailService.SendEmail(
                     forgotPasswordViewModel.Email,
                     "Password reset",
-                    $"Ignore this message if you don't want to reset the password! Otherwise click this link: {callbackUrl}"
+                    $"Someone is trying to change your password. If it is you, click this link to confirm password reset: <br /> <a href=\"{callbackUrl}\"> Reset Password </a>"
                 );
 
                 return Ok();
@@ -130,8 +130,12 @@ namespace API.Controllers
             return BadRequest("The password is too weak");
         }
 
-        [HttpGet]
-        public async Task<ActionResult> ResetPassword(string password, string email, string token = null)
+        [HttpGet("ResetPassword")]
+        public async Task<ActionResult> ResetPassword(
+            string password,
+            string email,
+            string token = null
+        )
         {
             if (token == null)
             {
@@ -139,7 +143,7 @@ namespace API.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(email);
-            
+
             if (user == null)
             {
                 return NotFound();
@@ -147,7 +151,7 @@ namespace API.Controllers
 
             await _userManager.ResetPasswordAsync(user, token, password);
 
-            return Redirect("https://google.com");
+            return Redirect("https://localhost:4300/");
         }
     }
 }

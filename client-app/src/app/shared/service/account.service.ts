@@ -13,10 +13,7 @@ export class AccountService {
 
   currentUser = new BehaviorSubject<User | null>(null);
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-  ) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string) {
     return this.http
@@ -51,5 +48,12 @@ export class AccountService {
     localStorage.removeItem('user');
     this.currentUser.next(null);
     this.router.navigateByUrl('/');
+  }
+
+  forgotPassword(email?: string, password?: string) {
+    return this.http.post(this.baseUrl + 'account/forgotpassword', {
+      email,
+      password,
+    });
   }
 }

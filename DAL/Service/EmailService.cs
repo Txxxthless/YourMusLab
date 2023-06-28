@@ -27,12 +27,22 @@ namespace DAL.Service
                 Credentials = new NetworkCredential(
                     _configuration["EmailConfig:Email"],
                     _configuration["EmailConfig:Password"]
-                )
+                ),
+            };
+
+            var emailMessage = new MailMessage(
+                _configuration["EmailConfig:Email"],
+                email,
+                subject,
+                message
+            )
+            {
+                IsBodyHtml = true
             };
 
             try
             {
-                client.Send(_configuration["EmailConfig:Email"], email, subject, message);
+                client.Send(emailMessage);
             }
             catch (Exception ex)
             {
