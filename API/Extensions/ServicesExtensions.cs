@@ -37,6 +37,7 @@ namespace API.Extensions
                 var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
                 return ConnectionMultiplexer.Connect(options); 
             });
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
 
             services.AddCors(options =>
             {

@@ -30,9 +30,10 @@ namespace API.Controllers
             _identityService = identityService;
         }
 
+        [Cached(600)]
         [HttpGet]
         [Route("track")]
-        public async Task<ActionResult> GetTack([FromQuery] TrackSpecificationParams trackParams)
+        public async Task<ActionResult> GetTrack([FromQuery] TrackSpecificationParams trackParams)
         {
             var specification = new TrackSpecification(trackParams);
             var track = await _unitOfWork
@@ -41,6 +42,7 @@ namespace API.Controllers
             return Ok(_trackMapper.MapOver(track));
         }
 
+        [Cached(600)]
         [HttpGet]
         [Route("tracks")]
         public async Task<ActionResult> GetTacks([FromQuery] TrackSpecificationParams trackParams)
@@ -52,6 +54,7 @@ namespace API.Controllers
             return Ok(_trackMapper.MapOver(tracks));
         }
 
+        [Cached(600)]
         [HttpGet]
         [Route("albums")]
         public async Task<ActionResult> GetAlbums([FromQuery] AlbumSpecificationParams albumParams)
@@ -63,6 +66,7 @@ namespace API.Controllers
             return Ok(_albumMapper.MapOver(albums));
         }
 
+        [Cached(600)]
         [HttpGet]
         [Route("genres")]
         public async Task<ActionResult> GetGenres()
@@ -70,6 +74,7 @@ namespace API.Controllers
             return Ok(await _unitOfWork.Repository<Genre>().GetAllAsync());
         }
 
+        [Cached(600)]
         [HttpGet]
         [Route("authors")]
         public async Task<ActionResult> GetAuthors()
