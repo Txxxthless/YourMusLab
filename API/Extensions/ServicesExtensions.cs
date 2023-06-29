@@ -5,6 +5,7 @@ using DAL.Repository;
 using DAL.Service;
 using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API.Extensions
 {
@@ -30,6 +31,12 @@ namespace API.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IEmailService, EmailService>();
+
+            services.AddSingleton<IConnectionMultiplexer>(cofig =>
+            {
+                var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
+                return ConnectionMultiplexer.Connect(options); 
+            });
 
             services.AddCors(options =>
             {
