@@ -13,6 +13,8 @@ export class RegisterComponent {
   passwordExp =
     "(?=^.{6,10}$)(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*s).*$";
 
+  error = '';
+
   registerForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -25,6 +27,8 @@ export class RegisterComponent {
   constructor(private accountService: AccountService, private router: Router) {}
 
   onSubmit() {
+    this.error = '';
+
     if (
       this.registerForm.value.email &&
       this.registerForm.value.password &&
@@ -37,7 +41,8 @@ export class RegisterComponent {
           this.registerForm.value.username
         )
         .subscribe({
-          next: (user) => this.router.navigateByUrl('/'),
+          next: () => this.router.navigateByUrl('/'),
+          error: (error) => (this.error = error.error.message),
         });
     }
   }

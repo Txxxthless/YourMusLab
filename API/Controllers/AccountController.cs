@@ -1,5 +1,6 @@
 using API.Helpers;
 using DAL.Interface;
+using Domain.Entity;
 using Domain.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,14 +31,14 @@ namespace API.Controllers
 
             if (user == null)
             {
-                return Unauthorized("Incorrect email or password");
+                return Unauthorized(new ApiResponse("Incorrect email or password"));
             }
 
             var result = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
 
             if (!result)
             {
-                return Unauthorized("Incorrect email or password");
+                return Unauthorized(new ApiResponse("Incorrect email or password"));
             }
 
             return Ok(
@@ -57,7 +58,14 @@ namespace API.Controllers
 
             if (user != null)
             {
-                return BadRequest("Email is in use");
+                return BadRequest(new ApiResponse("This email is already taken"));
+            }
+
+            user = await _userManager.FindByNameAsync(registerViewModel.Username);
+
+            if (user != null)
+            {
+                return BadRequest(new ApiResponse("This username is already taken"));
             }
 
             user = new IdentityUser()
@@ -70,7 +78,7 @@ namespace API.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest("The password is too weak");
+                return BadRequest(new ApiResponse("The password is too weak"));
             }
 
             return Ok(

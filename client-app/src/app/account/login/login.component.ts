@@ -14,14 +14,18 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required]),
   });
 
+  error: string = '';
+
   constructor(private accountService: AccountService, private router: Router) {}
 
   onSubmit() {
+    this.error = '';
     if (this.loginForm.value.email && this.loginForm.value.password) {
       this.accountService
         .login(this.loginForm.value.email, this.loginForm.value.password)
         .subscribe({
-          next: (user) => this.router.navigateByUrl('/'),
+          next: () => this.router.navigateByUrl('/'),
+          error: (error) => (this.error = error.error.message),
         });
     }
   }

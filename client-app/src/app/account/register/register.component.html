@@ -3,6 +3,7 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="text-center mb-4">
         <h1 class="mb-3">Sign up</h1>
+        <p class="text-danger mt-4" *ngIf="error">{{ error }}</p>
         <input
           type="text"
           autocomplete="off"
